@@ -158,8 +158,8 @@ def launch_chrome(
 
     proc = subprocess.Popen(
         cmd,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
     _chrome_process = proc
 
@@ -169,10 +169,10 @@ def launch_chrome(
         if is_port_open(port):
             print(f"[chrome_launcher] Chromium is ready on port {port}.")
             return proc
-        time.sleep(0.5)
+        time.sleep(1)
 
     print(
-        f"[chrome_launcher] WARNING: Chrome started but port {port} not responding "
+        f"[chrome_launcher] WARNING: Chromium started but port {port} not responding "
         f"after {STARTUP_TIMEOUT}s. It may still be initializing.",
         file=sys.stderr,
     )
