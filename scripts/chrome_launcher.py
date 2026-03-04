@@ -1,9 +1,9 @@
 """
-Chrome launcher with CDP remote debugging support.
+Chromium launcher with CDP remote debugging support.
 
-Manages a dedicated Chrome instance for Xiaohongshu publishing:
-- Detects if Chrome is already listening on the debug port
-- Launches Chrome with a dedicated user-data-dir for login persistence
+Manages a dedicated Chromium instance for Xiaohongshu publishing:
+- Detects if Chromium is already listening on the debug port
+- Launches Chromium with a dedicated user-data-dir for login persistence
 - Waits for the debug port to become available
 - Supports headless mode for automated publishing without GUI
 - Supports switching between headless and headed mode (e.g. for login)
@@ -19,16 +19,16 @@ from typing import Optional
 
 CDP_PORT = 9222
 PROFILE_DIR_NAME = "XiaohongshuProfile"
-STARTUP_TIMEOUT = 15  # seconds to wait for Chrome to start
+STARTUP_TIMEOUT = 15  # seconds to wait for Chromium to start
 
-# Track the Chrome process we launched so we can kill it later
+# Track the Chromium process we launched so we can kill it later
 _chrome_process: subprocess.Popen | None = None
 # Track the current account being used
 _current_account: Optional[str] = None
 
 
 def get_chrome_path() -> str:
-    """Find Chrome executable on Windows/macOS/Linux."""
+    """Find Chromium executable on Windows/macOS/Linux."""
     candidates = []
 
     if sys.platform == "win32":
@@ -72,13 +72,13 @@ def get_chrome_path() -> str:
         return found
 
     raise FileNotFoundError(
-        "Chromium/Chrome not found. Please install Chromium or a Chromium-based browser."
+        "Chromium/Chromium not found. Please install Chromium or a Chromium-based browser."
     )
 
 
 def get_user_data_dir(account: Optional[str] = None) -> str:
     """
-    Return the Chrome profile directory path for a given account.
+    Return the Chromium profile directory path for a given account.
 
     Args:
         account: Account name. If None, uses the default account from account_manager.
@@ -151,7 +151,7 @@ def launch_chrome(
 
     mode_label = "headless" if headless else "headed"
     account_label = account or "default"
-    print(f"[chrome_launcher] Launching Chrome ({mode_label}, account: {account_label})...")
+    print(f"[chrome_launcher] Launching Chromium ({mode_label}, account: {account_label})...")
     print(f"  executable : {chrome_path}")
     print(f"  profile dir: {user_data_dir}")
     print(f"  debug port : {port}")
@@ -167,7 +167,7 @@ def launch_chrome(
     deadline = time.time() + STARTUP_TIMEOUT
     while time.time() < deadline:
         if is_port_open(port):
-            print(f"[chrome_launcher] Chrome is ready on port {port}.")
+            print(f"[chrome_launcher] Chromium is ready on port {port}.")
             return proc
         time.sleep(0.5)
 
@@ -315,7 +315,7 @@ def get_current_account() -> Optional[str]:
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="Chrome Launcher for CDP")
+    parser = argparse.ArgumentParser(description="Chromium Launcher for CDP")
     parser.add_argument("--port", type=int, default=CDP_PORT,
                         help=f"CDP remote debugging port (default: {CDP_PORT})")
     parser.add_argument("--headless", action="store_true", help="Launch in headless mode")
@@ -331,7 +331,7 @@ if __name__ == "__main__":
         restart_chrome(port=args.port, headless=args.headless, account=args.account)
         print("[chrome_launcher] Chrome restarted.")
     elif ensure_chrome(port=args.port, headless=args.headless, account=args.account):
-        print("[chrome_launcher] Chrome is ready for CDP connections.")
+        print("[chrome_launcher] Chromium is ready for CDP connections.")
     else:
         print("[chrome_launcher] Failed to start Chrome.", file=sys.stderr)
         sys.exit(1)

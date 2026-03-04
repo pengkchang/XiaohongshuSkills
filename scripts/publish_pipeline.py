@@ -462,7 +462,7 @@ def main():
     mode_label = "headless" if headless else "headed"
     account_label = cache_account_name
     print(
-        f"[pipeline] Step 1: Ensuring Chrome is running "
+        f"[pipeline] Step 1: Ensuring Chromium is running "
         f"({mode_label}, account: {account_label}, host: {host}, port: {port})..."
     )
     print(f"[pipeline] Timing jitter ratio: {timing_jitter:.2f}")

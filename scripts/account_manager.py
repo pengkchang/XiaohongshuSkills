@@ -1,7 +1,7 @@
 """
 Multi-account manager for Xiaohongshu publishing.
 
-Manages multiple Xiaohongshu accounts with separate Chrome profiles:
+Manages multiple Xiaohongshu accounts with separate Chromium profiles:
 - Each account has its own user-data-dir for cookie isolation
 - Accounts are stored in a JSON config file
 - Supports add/remove/list/switch operations
@@ -72,7 +72,7 @@ def _save_accounts(data: dict):
 
 def get_profile_dir(account_name: Optional[str] = None) -> str:
     """
-    Get the Chrome profile directory for a given account.
+    Get the Chromium profile directory for a given account.
 
     Args:
         account_name: Account name. If None, uses the default account.
@@ -172,7 +172,7 @@ def remove_account(name: str, delete_profile: bool = False) -> bool:
 
     Args:
         name: Account name to remove
-        delete_profile: If True, also delete the Chrome profile directory
+        delete_profile: If True, also delete the Chromium profile directory
 
     Returns True if removed, False if not found or is default.
     """
@@ -242,7 +242,7 @@ def main():
     p_rm = sub.add_parser("remove", help="Remove an account")
     p_rm.add_argument("name", help="Account name to remove")
     p_rm.add_argument("--delete-profile", action="store_true",
-                      help="Also delete the Chrome profile directory")
+                      help="Also delete the Chromium profile directory")
 
     # info
     p_info = sub.add_parser("info", help="Show account info")

@@ -34,7 +34,7 @@ metadata:
 
 ## 测试浏览器流程（不发布）
 
-1. 启动 post-to-xhs 专用 Chrome（默认有窗口模式，便于人工观察）。
+1. 启动 post-to-xhs 专用 Chromium（默认有窗口模式，便于人工观察）。
 2. 如用户要求静默运行，再使用无头模式。
 3. 可选：执行登录状态检查并回传结果。
 4. 结束后如用户要求，关闭测试浏览器实例。
@@ -107,7 +107,7 @@ python scripts/cdp_publish.py --port 9222 check-login
 # 指定端口 + 优先复用已有标签页
 python scripts/cdp_publish.py --port 9222 --reuse-existing-tab check-login
 
-# 连接远程 CDP 检查登录（远程 Chrome 需已开启调试端口）
+# 连接远程 CDP 检查登录（远程 Chromium 需已开启调试端口）
 python scripts/cdp_publish.py --host 10.0.0.12 --port 9222 check-login
 
 # 重启测试浏览器
@@ -131,7 +131,7 @@ python scripts/cdp_publish.py login
 # 指定端口登录
 python scripts/cdp_publish.py --port 9223 login
 
-# 远程 CDP 登录（不会自动重启远程 Chrome）
+# 远程 CDP 登录（不会自动重启远程 Chromium）
 python scripts/cdp_publish.py --host 10.0.0.12 --port 9222 login
 ```
 
@@ -155,7 +155,7 @@ python scripts/publish_pipeline.py  --reuse-existing-tab --title-file title.txt 
   --content-file content.txt \
   --image-urls "URL1" "URL2"
 
-# 远程 CDP 发布（远程 Chrome 需预先启动并可访问）
+# 远程 CDP 发布（远程 Chromium 需预先启动并可访问）
 python scripts/publish_pipeline.py --host 10.0.0.12 --title-file title.txt \
   --content-file content.txt \
   --image-urls "URL1" "URL2"

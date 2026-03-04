@@ -1,7 +1,7 @@
 """
 CDP-based Xiaohongshu publisher.
 
-Connects to a Chrome instance via Chrome DevTools Protocol to automate
+Connects to a Chromium instance via Chromium DevTools Protocol to automate
 publishing articles on Xiaohongshu (RED) creator center.
 
 CLI usage:

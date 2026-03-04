@@ -10,7 +10,7 @@
 - **话题标签自动写入**：识别正文最后一行 `#标签`，然后逐渐写入
 - **多账号支持**：支持管理多个小红书账号，各账号 Cookie 隔离
 - **无头模式**：支持后台运行，无需显示浏览器窗口
-- **远程 CDP 支持**：可通过 `--host` / `--port` 连接远程 Chrome 调试端口
+- **远程 CDP 支持**：可通过 `--host` / `--port` 连接远程 Chromium/Chrome 调试端口
 - **图片下载**：支持从 URL 自动下载图片，自动添加 Referer 绕过防盗链
 - **登录检测**：自动检测登录状态，未登录时自动切换到有窗口模式扫码
 - **登录状态缓存**：`check_login/check_home_login` 默认本地缓存 12 小时，减少重复跳转校验
@@ -41,7 +41,7 @@ pip install -r requirements.txt
 python scripts/cdp_publish.py login
 ```
 
-在弹出的 Chrome 窗口中扫码登录小红书。
+在弹出的 Chromium 窗口中扫码登录小红书。
 
 ### 2. 启动/测试浏览器（不发布）
 
@@ -58,7 +58,7 @@ python scripts/cdp_publish.py check-login
 # 可选：优先复用已有标签页（减少有窗口模式下切到前台）
 python scripts/cdp_publish.py check-login --reuse-existing-tab
 
-# 连接远程 CDP（Chrome 在另一台机器）
+# 连接远程 CDP（Chromium/Chrome 在另一台机器）
 python scripts/cdp_publish.py --host 10.0.0.12 --port 9222 check-login
 
 # 重启测试浏览器
@@ -90,7 +90,7 @@ python scripts/publish_pipeline.py --reuse-existing-tab \
     --content "文章正文" \
     --image-urls "https://example.com/image.jpg"
 
-# 连接远程 CDP 并发布（远程 Chrome 需已开启调试端口）
+# 连接远程 CDP 并发布（远程 Chromium/Chrome 需已开启调试端口）
 python scripts/publish_pipeline.py --host 10.0.0.12 --port 9222 \
     --title "文章标题" \
     --content "文章正文" \
@@ -215,7 +215,7 @@ python scripts/publish_pipeline.py [选项]
 ```
 
 说明：启用 `--reuse-existing-tab` 后，发布流程仍会自动导航到发布页，因此会刷新到目标页面再继续执行。
-说明：当 `--host` 非 `127.0.0.1/localhost` 时为远程模式，会跳过本地 `chrome_launcher.py` 的自动启动/重启逻辑，请确保远程 CDP 地址可达。
+说明：当 `--host` 非 `127.0.0.1/localhost` 时为远程模式，会跳过本地 `chrome_launcher.py` 的自动启动/重启逻辑，请确保远程 Chromium/Chrome CDP 地址可达。
 说明：当控制端运行在 WSL、但媒体路径使用 Windows/UNC（如 `\\wsl.localhost\...`）时，可加 `--skip-file-check` 跳过 Linux 侧 `isfile` 预校验。
 说明：`publish_pipeline.py` 默认会自动点击发布；如需人工确认，请显式加 `--preview`。
 
@@ -270,17 +270,17 @@ python scripts/cdp_publish.py switch-account
 
 ### chrome_launcher.py
 
-Chrome 浏览器管理。
+Chromium 浏览器管理。
 
 ```bash
-# 启动 Chrome
+# 启动 Chromium
 python scripts/chrome_launcher.py
 python scripts/chrome_launcher.py --headless
 
-# 重启 Chrome
+# 重启 Chromium
 python scripts/chrome_launcher.py --restart
 
-# 关闭 Chrome
+# 关闭 Chromium
 python scripts/chrome_launcher.py --kill
 ```
 
