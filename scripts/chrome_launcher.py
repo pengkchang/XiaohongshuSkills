@@ -48,10 +48,10 @@ def get_chrome_path() -> str:
     else:
         candidates.extend(
             [
+                "/usr/bin/chromium",
+                "/usr/bin/chromium-browser",
                 "/usr/bin/google-chrome",
                 "/usr/bin/google-chrome-stable",
-                "/usr/bin/chromium-browser",
-                "/usr/bin/chromium",
             ]
         )
 
@@ -61,10 +61,10 @@ def get_chrome_path() -> str:
 
     import shutil
     found = (
-        shutil.which("google-chrome")
-        or shutil.which("google-chrome-stable")
+        shutil.which("chromium")
         or shutil.which("chromium-browser")
-        or shutil.which("chromium")
+        or shutil.which("google-chrome")
+        or shutil.which("google-chrome-stable")
         or shutil.which("chrome")
         or shutil.which("chrome.exe")
     )
