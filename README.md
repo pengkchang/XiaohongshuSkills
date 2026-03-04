@@ -24,8 +24,8 @@
 ### 环境要求
 
 - Python 3.10+
-- Google Chrome 浏览器
-- Windows 操作系统（目前仅测试 Windows）
+- Chromium 浏览器（或基于 Chromium 的浏览器，如 Google Chrome、Microsoft Edge 等）
+- Linux 操作系统（Debian 11+ 或基于 Debian 11+ 的发行版，如 Deepin 23）
 
 ### 安装依赖
 

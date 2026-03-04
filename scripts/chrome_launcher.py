@@ -72,7 +72,7 @@ def get_chrome_path() -> str:
         return found
 
     raise FileNotFoundError(
-        "Chrome not found. Please install Google Chrome or set its path manually."
+        "Chromium/Chrome not found. Please install Chromium or a Chromium-based browser."
     )
 
 
@@ -91,10 +91,14 @@ def get_user_data_dir(account: Optional[str] = None) -> str:
         return get_profile_dir(account)
     except ImportError:
         # Fallback if account_manager not available
-        local_app_data = os.environ.get("LOCALAPPDATA", "")
-        if not local_app_data:
-            local_app_data = os.path.expanduser("~")
-        return os.path.join(local_app_data, "Google", "Chrome", PROFILE_DIR_NAME)
+        if sys.platform == "win32":
+            local_app_data = os.environ.get("LOCALAPPDATA", "")
+            if not local_app_data:
+                local_app_data = os.path.expanduser("~")
+            return os.path.join(local_app_data, "Google", "Chrome", PROFILE_DIR_NAME)
+        else:
+            # Linux/macOS: use home directory
+            return os.path.join(os.path.expanduser("~"), ".config", "chromium", PROFILE_DIR_NAME)
 
 
 def is_port_open(port: int, host: str = "127.0.0.1") -> bool:

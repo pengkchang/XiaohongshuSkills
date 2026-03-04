@@ -25,8 +25,12 @@ CONFIG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "con
 ACCOUNTS_FILE = os.path.join(CONFIG_DIR, "accounts.json")
 
 # Base directory for account profiles
-PROFILES_BASE = os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")),
-                              "Google", "Chrome", "XiaohongshuProfiles")
+if sys.platform == "win32":
+    PROFILES_BASE = os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")),
+                                  "Google", "Chrome", "XiaohongshuProfiles")
+else:
+    # Linux/macOS: use .config directory
+    PROFILES_BASE = os.path.join(os.path.expanduser("~"), ".config", "chromium", "XiaohongshuProfiles")
 
 # Default account name (for backward compatibility)
 DEFAULT_PROFILE_NAME = "default"
