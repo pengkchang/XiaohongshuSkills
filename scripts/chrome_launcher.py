@@ -19,7 +19,7 @@ from typing import Optional
 
 CDP_PORT = 9222
 PROFILE_DIR_NAME = "XiaohongshuProfile"
-STARTUP_TIMEOUT = 15  # seconds to wait for Chromium to start
+STARTUP_TIMEOUT = 30  # seconds to wait for Chromium to start
 
 # Track the Chromium process we launched so we can kill it later
 _chrome_process: subprocess.Popen | None = None
