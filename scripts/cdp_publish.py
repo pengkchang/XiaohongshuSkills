@@ -2131,11 +2131,46 @@ class XiaohongshuPublisher:
                         return {{ x: r.x, y: r.y, width: r.width, height: r.height }};
                     }}
                 }}
+                // Strategy 3: btn-text span (div-based buttons like btn-wrapper/btn-inner)
+                var allEls = Array.from(document.querySelectorAll('*'));
+                for (var i = 0; i < allEls.length; i++) {{
+                    var cls = String(allEls[i].className || '');
+                    if (cls.indexOf('btn-text') !== -1 && allEls[i].textContent.trim() === '{btn_text}') {{
+                        var el = allEls[i].closest('[class*="btn-wrapper"],[class*="btn-inner"],[class*="button"]') || allEls[i];
+                        var r = el.getBoundingClientRect();
+                        if (r.width > 0 && r.height > 0) return {{ x: r.x, y: r.y, width: r.width, height: r.height }};
+                    }}
+                }}
+                // Strategy 4: any element whose trimmed innerText exactly matches (y > 100 to skip nav)
+                for (var i = 0; i < allEls.length; i++) {{
+                    var t = (allEls[i].innerText || '').trim();
+                    if (t === '{btn_text}') {{
+                        var r = allEls[i].getBoundingClientRect();
+                        if (r.width > 20 && r.height > 10 && r.y > 100) {{
+                            return {{ x: r.x, y: r.y, width: r.width, height: r.height }};
+                        }}
+                    }}
+                }}
                 return null;
             }})();
         """
 
-        self._click_element_by_cdp("publish button", js_get_rect)
+        # Strategy 0 (fastest): trigger xhs-publish-btn web component directly via events
+        triggered = self._evaluate("""
+            (function() {
+                var btn = document.querySelector('xhs-publish-btn');
+                if (!btn) return false;
+                if (btn.getAttribute('submit-disabled') === 'true') return false;
+                btn.dispatchEvent(new CustomEvent('submit', {bubbles: true}));
+                btn.dispatchEvent(new CustomEvent('publish', {bubbles: true}));
+                btn.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}));
+                return true;
+            })()
+        """)
+        if triggered:
+            print("[cdp_publish] Publish button triggered via xhs-publish-btn component.")
+        else:
+            self._click_element_by_cdp("publish button", js_get_rect)
         print("[cdp_publish] Publish button clicked.")
 
         # Wait for publish success and get note link
