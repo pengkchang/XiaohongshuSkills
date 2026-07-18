@@ -1955,10 +1955,16 @@ class XiaohongshuPublisher:
                         var el = document.querySelector('{selector}');
                         el.focus();
                         var text = {escaped};
+                        var escapeHtml = function(t) {{
+                            return t
+                                .replaceAll('&', '&amp;')
+                                .replaceAll('<', '&lt;')
+                                .replaceAll('>', '&gt;');
+                        }};
                         var paragraphs = text.split('\\n').filter(function(p) {{ return p.trim(); }});
                         var html = [];
                         for (var i = 0; i < paragraphs.length; i++) {{
-                            html.push('<p>' + paragraphs[i] + '</p>');
+                            html.push('<p>' + escapeHtml(paragraphs[i]) + '</p>');
                             if (i < paragraphs.length - 1) {{
                                 html.push('<p><br></p>');
                             }}

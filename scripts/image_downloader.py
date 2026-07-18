@@ -10,12 +10,52 @@ import sys
 import tempfile
 import shutil
 import uuid
+import ipaddress
+import socket
 from urllib.parse import urlparse, unquote
 
 import requests
 
 DEFAULT_TIMEOUT = 30  # seconds per download
 TEMP_DIR_PREFIX = "xhs_images_"
+
+
+def _is_safe_url(url: str) -> bool:
+    """Validate URL to prevent SSRF.
+
+    Only allows http/https schemes and blocks private/loopback/link-local
+    hostnames and IPs so that a malicious URL cannot reach internal services
+    or cloud metadata endpoints (e.g. 169.254.169.254).
+    """
+    try:
+        parsed = urlparse(url)
+    except Exception:
+        return False
+    if parsed.scheme not in ("http", "https"):
+        return False
+    hostname = parsed.hostname
+    if not hostname:
+        return False
+    # Resolve hostname and check all resolved IPs.
+    try:
+        infos = socket.getaddrinfo(hostname, None)
+    except socket.gaierror:
+        return False
+    for info in infos:
+        ip_str = info[4][0]
+        try:
+            ip = ipaddress.ip_address(ip_str)
+        except ValueError:
+            continue
+        if (
+            ip.is_private
+            or ip.is_loopback
+            or ip.is_link_local
+            or ip.is_reserved
+            or ip.is_multicast
+        ):
+            return False
+    return True
 
 
 class ImageDownloader:
@@ -87,6 +127,8 @@ class ImageDownloader:
 
         Raises requests.RequestException on network errors.
         """
+        if not _is_safe_url(url):
+            raise ValueError(f"Blocked unsafe URL (potential SSRF): {url}")
         # Build headers with Referer to bypass hotlink protection
         parsed = urlparse(url)
         if referer is None:
@@ -123,6 +165,8 @@ class ImageDownloader:
 
         Raises requests.RequestException on network errors.
         """
+        if not _is_safe_url(url):
+            raise ValueError(f"Blocked unsafe URL (potential SSRF): {url}")
         parsed = urlparse(url)
         if referer is None:
             referer = f"{parsed.scheme}://{parsed.netloc}/"
